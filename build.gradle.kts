@@ -6,9 +6,14 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.20" apply false
     id("com.google.devtools.ksp") version "1.9.20-1.0.14" apply false
     id("com.google.dagger.hilt.android") version "2.48" apply false
+    id("org.jetbrains.dokka") version "1.9.10"
 }
 
-//repositories {
-//    maven { url = uri("https://jitpack.io") }
-//    mavenCentral()
-//}
+buildscript {
+
+    dependencies{
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.9.10")
+    }
+
+}
+

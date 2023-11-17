@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+
 class ProductRepository @Inject constructor(
     private val productDao: IProductDao,
 ) : IProductRepository {

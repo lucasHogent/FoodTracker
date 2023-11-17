@@ -6,6 +6,7 @@ import com.project.foodtracker.data.database.dao.IProductDao
 import com.project.foodtracker.data.database.entities.asDomainModel
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import com.project.foodtracker.domain.model.ProductModel
+import com.project.foodtracker.domain.repository.IProductRepository
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -25,7 +26,7 @@ import java.util.UUID
 @SmallTest
 class ProductRepositoryTest {
 
-    private lateinit var productRepository: ProductRepository
+    private lateinit var productRepository: IProductRepository
     private lateinit var productDao : IProductDao
 
     private val testDispatcher = StandardTestDispatcher()
