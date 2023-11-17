@@ -38,11 +38,11 @@ class ProductDatabaseTest {
         database.productDao().insert(product)
 
         // Retrieve the product from the database
-        val retrievedFood = database.productDao().get(product.id).first()
+        val retrievedFood = database.productDao().get(product.productId).first()
 
         // Assert that the retrieved product is not null and has the correct values
-        assert(retrievedFood.id == product.id)
-        assert(retrievedFood.name == product.name)
+        assert(retrievedFood.productId == product.productId)
+        assert(retrievedFood.title == product.title)
         assert(retrievedFood == product)
     }
 }

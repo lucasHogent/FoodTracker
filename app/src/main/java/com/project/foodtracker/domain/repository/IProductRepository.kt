@@ -1,6 +1,6 @@
 package com.project.foodtracker.domain.repository
 
-import com.project.foodtracker.domain.model.ProductModel
+import com.project.foodtracker.domain.model.product.ProductModel
 import kotlinx.coroutines.flow.Flow
 
 interface IProductRepository {
