@@ -1,30 +1,26 @@
 package com.project.foodtracker.data.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import com.project.foodtracker.data.database.entities.Product
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IProductDao {
     @Insert
-    suspend fun insert(product: Product)
-
-    @Update
-    suspend fun update(product: Product)
+    fun insert(product: Product)
 
     @Query("SELECT * from product_table WHERE id = :key")
-    suspend fun get(key: String): Product?
+    fun get(key: String): Flow<Product>
 
     @Query("SELECT * FROM product_table ORDER BY id DESC")
-    suspend fun getAllProducts(): List<Product>
+    fun getAllProducts(): Flow<List<Product>>
 
     @Query("DELETE FROM product_table")
-    suspend fun clear()
+    fun clear()
 
     @Query("SELECT * FROM product_table ORDER BY name DESC")
-    fun getAllProductsLive(): LiveData<List<Product>>
+    fun getAllProductsLive(): Flow<List<Product>>
 
 }

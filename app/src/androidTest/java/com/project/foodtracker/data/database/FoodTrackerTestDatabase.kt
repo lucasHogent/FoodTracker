@@ -1,4 +1,4 @@
-package com.project.foodtracker.local.db
+package com.project.foodtracker.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
