@@ -1,7 +1,10 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -22,8 +25,10 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments["room.schemaLocation"] =
-                    "$projectDir/schemas"
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true"
+                )
             }
         }
     }
@@ -65,7 +70,15 @@ dependencies {
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.media3:media3-test-utils:1.2.0")
+    implementation("com.google.android.datatransport:transport-runtime:3.2.0")
+    implementation("com.google.android.engage:engage-core:1.3.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("org.mockito:mockito-android:5.7.0")
     testImplementation("junit:junit:4.13.2")
+
+    // faker to use in unit tests
+    //testImplementation("com.github.blocoio:faker:2.0.1")
+    //androidTestImplementation("com.github.blocoio:faker:2.0.1")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -78,30 +91,27 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Room Database dependencies
-
     val room_version = "2.6.0"
-
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    // To use Kotlin Symbol Processing (KSP)
     ksp("androidx.room:room-compiler:$room_version")
-
-    // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
-
-    // optional - RxJava2 support for Room
     implementation("androidx.room:room-rxjava2:$room_version")
-
-    // optional - RxJava3 support for Room
     implementation("androidx.room:room-rxjava3:$room_version")
-
-    // optional - Guava support for Room, including Optional and ListenableFuture
     implementation("androidx.room:room-guava:$room_version")
-
-    // optional - Test helpers
     testImplementation("androidx.room:room-testing:$room_version")
-
-    // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
+
+    // Hilt for dependency injection
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.48.1")
+    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    kaptTest("com.google.dagger:hilt-compiler:2.48.1")
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
