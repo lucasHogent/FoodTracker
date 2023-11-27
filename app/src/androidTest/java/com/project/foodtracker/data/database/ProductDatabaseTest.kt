@@ -3,6 +3,7 @@ package com.project.foodtracker.data.database
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -33,16 +34,22 @@ class ProductDatabaseTest {
     fun insertAndReadProduct() = runBlocking {
 
         val product = MockProductEntityProvider.createMockProductEntity()
+        val ingredients = MockProductEntityProvider.createTestIngredientEntitiesList(10)
 
         // Insert the product into the database
-        database.productDao().insert(product)
+        var productId = database.productDao().insert(product)
+        var ingredientIds = database.ingredientDao().insertAll(ingredients)
+        for(ingredient in ingredients){
+            database.productDao().insert(ProductWithIngredientsCrossRef(product.productId, ingredient.ingredientId))
+        }
+
 
         // Retrieve the product from the database
-        val retrievedFood = database.productDao().get(product.productId).first()
+        val retrievedFood = database.productDao().get(product.productId)
 
         // Assert that the retrieved product is not null and has the correct values
-        assert(retrievedFood.productId == product.productId)
-        assert(retrievedFood.title == product.title)
-        assert(retrievedFood == product)
+        assert(retrievedFood.productEntity.productId == product.productId)
+        assert(retrievedFood.productEntity.title == product.title)
+        assert(retrievedFood.productEntity == product)
     }
 }

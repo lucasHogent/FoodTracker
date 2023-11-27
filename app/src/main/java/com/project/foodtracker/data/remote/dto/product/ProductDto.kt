@@ -1,12 +1,6 @@
 package com.project.foodtracker.data.remote.dto.product
 
-import com.project.foodtracker.data.database.entities.ProductEntity
-import com.project.foodtracker.domain.model.product.CaloricBreakdownModel
-import com.project.foodtracker.domain.model.product.IngredientModel
-import com.project.foodtracker.domain.model.product.NutrientModel
-import com.project.foodtracker.domain.model.product.NutritionModel
-import com.project.foodtracker.domain.model.product.ProductModel
-import com.project.foodtracker.domain.model.product.ServingsModel
+import com.project.foodtracker.domain.model.product.ProductDetailModel
 
 data class ProductDto(
     val id: String,
@@ -20,25 +14,31 @@ data class ProductDto(
     val ingredients: List<IngredientDto>,
     val likes: Int,
     val aisle: String,
-    val nutrition: NutritionDto,
-    val price: Int,
+    val price: Double,
     val servings: ServingsDto,
-    val spoonacularScore: Int
+    val spoonacularScore: Double
 )
+fun ProductDto.toModel(): ProductDetailModel {
+    return ProductDetailModel(
+        id  = id,
+        title = title,
+        breadcrumbs = breadcrumbs,
+        imageType = imageType,
+        badges = badges,
+        importantBadges = importantBadges,
+        ingredientCount = ingredientCount,
+        generatedText = generatedText,
+        likes = likes,
+        aisle = aisle,
+        price = price,
+        servings = servings.toServingsModel(),
+        spoonacularScore = spoonacularScore,
+        ingredients = ingredients.toModelList()
 
-fun ProductDto.toProductEntity(): ProductEntity {
-    return ProductEntity(
-        productId = this.id,
-        title = this.title,
-        breadcrumbs = this.breadcrumbs,
-        imageType = this.imageType,
-        badges = this.badges,
-        importantBadges = this.importantBadges,
-        ingredientCount = this.ingredientCount,
-        generatedText = this.generatedText,
-        likes = this.likes,
-        aisle = this.aisle,
-        spoonacularScore = this.spoonacularScore
+
     )
 }
 
+fun List<ProductDto>.toModelList(): List<ProductDetailModel> {
+    return map { it.toModel() }
+}

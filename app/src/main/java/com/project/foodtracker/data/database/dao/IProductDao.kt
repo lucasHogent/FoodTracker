@@ -4,25 +4,33 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.project.foodtracker.data.database.entities.ProductEntity
-import kotlinx.coroutines.flow.Flow
+import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
+import com.project.foodtracker.data.database.wrapper.ProductWrapper
 
 @Dao
 interface IProductDao {
     @Insert
     fun insert(product: ProductEntity)
 
-    @Query("SELECT * from products WHERE productId = :key")
-    fun get(key: String): Flow<ProductEntity>
+    @Insert
+    fun insert(productWithIngredientsCrossRef: ProductWithIngredientsCrossRef)
 
+    @Transaction
+    @Query("SELECT * from products WHERE productId = :key")
+    fun get(key: String): ProductWrapper
+
+    @Transaction
     @Query("SELECT * FROM products ORDER BY productId DESC")
-    fun getAllProducts(): Flow<List<ProductEntity>>
+    fun getAllProducts(): List<ProductEntity>
 
     @Query("DELETE FROM products")
     fun clear()
 
+    @Transaction
     @Query("SELECT * FROM products ORDER BY title DESC")
-    fun getAllProductsLive(): Flow<List<ProductEntity>>
+    fun getAllProductsLive(): List<ProductWrapper>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(products: List<ProductEntity>)

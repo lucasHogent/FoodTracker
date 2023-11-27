@@ -15,14 +15,12 @@ interface IProductApiService {
         "Accept: */*",
         )
     @GET("/food/products/search")
-    suspend fun getProducts(@Query("number") number: Int = 30): Deferred<List<ProductDto>>
+    suspend fun getProducts(
+        @Query("query") title: String,
+        @Query("number") number: Int = 30,
+        @Query("offset") offset: Int = 0,): Deferred<List<ProductDto>>
 
     @GET("/food/products/:id?")
     suspend fun getProductById(@Path("id") productId: String): ProductDto
 
-    @GET("/food/products/suggest")
-    suspend fun findProductByTitle(
-        @Query("number") number: Int = 30,
-        @Query("query") title: String
-    ): Deferred<List<ProductDto>>
 }
