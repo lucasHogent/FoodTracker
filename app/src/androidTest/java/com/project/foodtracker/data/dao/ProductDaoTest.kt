@@ -1,11 +1,11 @@
-package com.project.foodtracker.data.database
+package com.project.foodtracker.data.dao
 
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.project.foodtracker.data.database.FoodTrackerTestDatabase
 import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
 import com.project.foodtracker.data.mock.MockProductEntityProvider
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class ProductDatabaseTest {
+class ProductDaoTest {
 
     private lateinit var database: FoodTrackerTestDatabase
     @Before
@@ -37,8 +37,9 @@ class ProductDatabaseTest {
         val ingredients = MockProductEntityProvider.createTestIngredientEntitiesList(10)
 
         // Insert the product into the database
-        var productId = database.productDao().insert(product)
-        var ingredientIds = database.ingredientDao().insertAll(ingredients)
+        database.productDao().insert(product)
+        database.ingredientDao().insertAll(*ingredients.toTypedArray())
+
         for(ingredient in ingredients){
             database.productDao().insert(ProductWithIngredientsCrossRef(product.productId, ingredient.ingredientId))
         }
@@ -52,4 +53,9 @@ class ProductDatabaseTest {
         assert(retrievedFood.productEntity.title == product.title)
         assert(retrievedFood.productEntity == product)
     }
+
+//    @Test
+//    getProductById_givesProduct() = runBlocking{
+//
+//    }
 }

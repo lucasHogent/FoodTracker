@@ -1,4 +1,4 @@
-package com.project.foodtracker.domain.model.product
+package com.project.foodtracker.domain.model
 
 import com.google.gson.annotations.SerializedName
 import com.project.foodtracker.data.database.entities.IngredientEntity

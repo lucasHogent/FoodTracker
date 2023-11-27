@@ -1,7 +1,7 @@
 package com.project.foodtracker.data.remote
 
 import com.project.foodtracker.common.Constants
-import com.project.foodtracker.data.remote.dto.product.ProductDto
+import com.project.foodtracker.data.remote.dto.ProductDto
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Headers

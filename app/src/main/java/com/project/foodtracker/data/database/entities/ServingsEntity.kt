@@ -1,6 +1,6 @@
 package com.project.foodtracker.data.database.entities
 
-import com.project.foodtracker.domain.model.product.ServingsModel
+import com.project.foodtracker.domain.model.ServingsModel
 
 data class ServingsEntity(
     val number: Int,

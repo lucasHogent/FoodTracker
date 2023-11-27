@@ -7,7 +7,7 @@ import com.project.foodtracker.data.database.entities.asDomain
 import com.project.foodtracker.data.mock.MockProductDtoProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import com.project.foodtracker.data.remote.IProductApiService
-import com.project.foodtracker.domain.model.product.ProductDetailModel
+import com.project.foodtracker.domain.model.ProductDetailModel
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 

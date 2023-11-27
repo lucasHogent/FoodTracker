@@ -13,9 +13,10 @@ import com.project.foodtracker.data.database.wrapper.ProductWrapper
 interface IProductDao {
     @Insert
     fun insert(product: ProductEntity)
-
     @Insert
     fun insert(productWithIngredientsCrossRef: ProductWithIngredientsCrossRef)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg products: ProductEntity)
 
     @Transaction
     @Query("SELECT * from products WHERE productId = :key")
@@ -31,8 +32,5 @@ interface IProductDao {
     @Transaction
     @Query("SELECT * FROM products ORDER BY title DESC")
     fun getAllProductsLive(): List<ProductWrapper>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(products: List<ProductEntity>)
 
 }

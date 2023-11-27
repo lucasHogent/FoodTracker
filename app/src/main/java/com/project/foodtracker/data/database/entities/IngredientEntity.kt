@@ -3,8 +3,7 @@ package com.project.foodtracker.data.database.entities
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.project.foodtracker.domain.model.product.IngredientModel
-import java.util.UUID
+import com.project.foodtracker.domain.model.IngredientModel
 
 @Entity(tableName = "ingredients",
     indices = [Index(name = "idxIngredientName", value = ["name"], unique = true)])

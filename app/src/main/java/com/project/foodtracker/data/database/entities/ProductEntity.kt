@@ -8,8 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.project.foodtracker.data.database.StringListConverter
-import com.project.foodtracker.domain.model.product.ProductModel
-import com.project.foodtracker.domain.model.product.ServingsModel
+import com.project.foodtracker.domain.model.ProductModel
 
 @Entity(tableName = "products",
     indices = [Index(name = "idxProductName", value = ["title"], unique = true)])

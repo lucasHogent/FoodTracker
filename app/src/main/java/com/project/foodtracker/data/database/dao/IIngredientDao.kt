@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface IIngredientDao {
     @Insert
     fun insert(nutrition: IngredientEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg ingredients: IngredientEntity)
 
     @Query("SELECT * from ingredients WHERE ingredientId = :key")
     fun get(key: String): Flow<IngredientEntity>
@@ -19,11 +21,10 @@ interface IIngredientDao {
     fun getByName(name: String): Flow<IngredientEntity>
 
     @Query("SELECT * FROM ingredients ORDER BY name DESC")
-    fun getAllIngredients(): Flow<List<IngredientEntity>>
+    fun getAllIngredients(): List<IngredientEntity>
 
     @Query("DELETE FROM ingredients")
     fun clear()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(ingredients: List<IngredientEntity>) : List<Long>
+
 }

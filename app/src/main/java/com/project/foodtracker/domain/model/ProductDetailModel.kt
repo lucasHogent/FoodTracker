@@ -1,4 +1,4 @@
-package com.project.foodtracker.domain.model.product
+package com.project.foodtracker.domain.model
 
 import com.project.foodtracker.data.database.entities.ProductEntity
 

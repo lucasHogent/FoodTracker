@@ -1,8 +1,8 @@
 package com.project.foodtracker.data.mock
 
- import com.project.foodtracker.data.remote.dto.product.IngredientDto
-import com.project.foodtracker.data.remote.dto.product.ProductDto
-import com.project.foodtracker.data.remote.dto.product.ServingsDto
+ import com.project.foodtracker.data.remote.dto.IngredientDto
+import com.project.foodtracker.data.remote.dto.ProductDto
+import com.project.foodtracker.data.remote.dto.ServingsDto
 
 object MockProductDtoProvider {
     fun createMockProductDto(): ProductDto {

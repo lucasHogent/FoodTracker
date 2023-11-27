@@ -1,6 +1,6 @@
-package com.project.foodtracker.data.remote.dto.product
+package com.project.foodtracker.data.remote.dto
 
-import com.project.foodtracker.domain.model.product.IngredientModel
+import com.project.foodtracker.domain.model.IngredientModel
 
 data class IngredientDto(
     val ingredientId: String,

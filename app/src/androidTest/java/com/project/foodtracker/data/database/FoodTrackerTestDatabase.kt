@@ -13,7 +13,7 @@ import com.project.foodtracker.data.database.entities.ProductWithIngredientsCros
     ProductEntity::class,
     ProductWithIngredientsCrossRef::class,
     IngredientEntity::class],
-    version = 1, exportSchema = false)
+    version = 1, exportSchema = true)
 @TypeConverters(StringListConverter::class)
 abstract class FoodTrackerTestDatabase : RoomDatabase() {
     abstract fun productDao(): IProductDao
