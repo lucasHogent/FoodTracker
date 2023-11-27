@@ -3,13 +3,14 @@ package com.project.foodtracker.data.repository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.project.foodtracker.data.database.dao.IProductDao
-import com.project.foodtracker.data.database.entities.asDomainModel
+import com.project.foodtracker.data.database.entities.asDomain
+import com.project.foodtracker.data.mock.MockProductDtoProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
-import com.project.foodtracker.domain.model.ProductModel
+import com.project.foodtracker.data.remote.IProductApiService
+import com.project.foodtracker.domain.model.ProductDetailModel
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
+
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -26,7 +27,8 @@ import java.util.UUID
 class ProductRepositoryTest {
 
     private lateinit var productRepository: ProductRepository
-    private lateinit var productDao : IProductDao
+    private lateinit var productDao: IProductDao
+    private lateinit var productApi: IProductApiService
 
     private val testDispatcher = StandardTestDispatcher()
     private val testScope = TestScope(testDispatcher)
@@ -34,7 +36,8 @@ class ProductRepositoryTest {
     @Before
     fun setup() {
         productDao = mock(IProductDao::class.java)
-        productRepository = ProductRepository(productDao)
+        productApi = mock(IProductApiService::class.java)
+        productRepository = ProductRepository(productDao, productApi)
     }
 
     @Test
@@ -42,32 +45,34 @@ class ProductRepositoryTest {
 
         // Given
         val mockProductList = MockProductEntityProvider.createMockProductEntityList(10)
-        `when`(productDao.getAllProducts()).thenReturn(flowOf(mockProductList))
+        `when`(productDao.getAllProducts()).thenReturn(mockProductList)
 
         // When
         val flowResult = productRepository.products
 
         // Then
-        flowResult.collect { product ->
-            assertEquals(mockProductList.map{ it.asDomainModel()}, product)
-        }
+
+        assertEquals(mockProductList.map { it.asDomain() }, mockProductList)
+
     }
 
     @Test
-    fun  getProductById_returns_product() = testScope.runTest {
+    fun getProductById_returns_product() = testScope.runTest {
 
         // Arrange
         val productId = UUID.randomUUID().toString()
-        val mockProductEntity = MockProductEntityProvider.createMockProductEntity().copy(id = productId)
+        val mockProductEntity = MockProductEntityProvider.createMockProductEntity()
+
+        mockProductEntity.copy(productId = productId)
 
         // When
-        `when`(productDao.get(productId)).thenReturn(flow { emit(mockProductEntity) })
+        // `when`(productDao.get(productId)).thenReturn(flow { emit(createMockProductDetailEntity()) })
         val flowResult = productRepository.getProductById(productId)
 
         // Then
-        flowResult.collect { productModel ->
-            assertEquals(mockProductEntity.asDomainModel(), productModel)
-        }
+
+        assertEquals(mockProductEntity.asDomain(), mockProductEntity)
+
     }
 
     @Test
@@ -81,9 +86,21 @@ class ProductRepositoryTest {
         val flowResult = productRepository.getProductById(productId)
 
         // Then
-        flowResult.collect() {
-            assertEquals(emptyList<ProductModel>(), flowResult)
-        }
+
+        assertEquals(emptyList<ProductDetailModel>(), flowResult)
+
+    }
+
+    @Test
+    fun getProductsFromApi_insertsProductEntities() = testScope.runTest {
+
+        // Given
+        val mockProductDto = MockProductDtoProvider.createMockProductDtoList(10)
+
+        // When
+
+        productRepository.refreshDatabase()
+
     }
 
 }

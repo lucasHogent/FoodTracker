@@ -76,10 +76,6 @@ dependencies {
     implementation("org.mockito:mockito-android:5.7.0")
     testImplementation("junit:junit:4.13.2")
 
-    // faker to use in unit tests
-    //testImplementation("com.github.blocoio:faker:2.0.1")
-    //androidTestImplementation("com.github.blocoio:faker:2.0.1")
-
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
@@ -87,14 +83,13 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Room Database dependencies
     val room_version = "2.6.0"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-rxjava2:$room_version")
     implementation("androidx.room:room-rxjava3:$room_version")
@@ -103,13 +98,17 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
 
     // Hilt for dependency injection
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.48.1")
-    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
-    kaptTest("com.google.dagger:hilt-compiler:2.48.1")
+    val hilt_version = "2.48.1"
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:$hilt_version")
+    testImplementation("com.google.dagger:hilt-android-testing:$hilt_version")
+    kaptTest("com.google.dagger:hilt-compiler:$hilt_version")
 
+    // RetroFit for Api calls
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
 
 kapt {

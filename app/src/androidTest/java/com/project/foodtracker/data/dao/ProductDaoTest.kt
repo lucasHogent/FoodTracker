@@ -1,10 +1,11 @@
-package com.project.foodtracker.data.database
+package com.project.foodtracker.data.dao
 
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.project.foodtracker.data.database.FoodTrackerTestDatabase
+import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
 import com.project.foodtracker.data.mock.MockProductEntityProvider
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -13,7 +14,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class ProductDatabaseTest {
+class ProductDaoTest {
 
     private lateinit var database: FoodTrackerTestDatabase
     @Before
@@ -33,16 +34,28 @@ class ProductDatabaseTest {
     fun insertAndReadProduct() = runBlocking {
 
         val product = MockProductEntityProvider.createMockProductEntity()
+        val ingredients = MockProductEntityProvider.createTestIngredientEntitiesList(10)
 
         // Insert the product into the database
         database.productDao().insert(product)
+        database.ingredientDao().insertAll(*ingredients.toTypedArray())
+
+        for(ingredient in ingredients){
+            database.productDao().insert(ProductWithIngredientsCrossRef(product.productId, ingredient.ingredientId))
+        }
+
 
         // Retrieve the product from the database
-        val retrievedFood = database.productDao().get(product.id).first()
+        val retrievedFood = database.productDao().get(product.productId)
 
         // Assert that the retrieved product is not null and has the correct values
-        assert(retrievedFood.id == product.id)
-        assert(retrievedFood.name == product.name)
-        assert(retrievedFood == product)
+        assert(retrievedFood.productEntity.productId == product.productId)
+        assert(retrievedFood.productEntity.title == product.title)
+        assert(retrievedFood.productEntity == product)
     }
+
+//    @Test
+//    getProductById_givesProduct() = runBlocking{
+//
+//    }
 }

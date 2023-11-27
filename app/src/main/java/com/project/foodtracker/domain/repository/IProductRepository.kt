@@ -1,13 +1,13 @@
 package com.project.foodtracker.domain.repository
 
+import com.project.foodtracker.domain.model.ProductDetailModel
 import com.project.foodtracker.domain.model.ProductModel
-import kotlinx.coroutines.flow.Flow
 
 interface IProductRepository {
 
-    val products: Flow<List<ProductModel>>
-    fun getProductById(productId: String): Flow<ProductModel>
-    fun searchAllProductsByName(name: String): Flow<List<ProductModel>>
+    val products: List<ProductModel>
+    fun getProductById(productId: String): ProductDetailModel
+    fun searchAllProductsByName(name: String): List<ProductDetailModel>
     suspend fun refreshDatabase()
 
 }
