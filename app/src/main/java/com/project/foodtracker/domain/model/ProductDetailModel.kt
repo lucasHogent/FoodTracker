@@ -23,11 +23,7 @@ data class ProductDetailModel(
 data class ProductModel(
     val id: String,
     val title: String,
-    val imageType: String,
-    val generatedText: String?,
-    val likes: Int,
-    val price: Double,
-    val spoonacularScore: Double
+    val imageType: String
 )
 
 fun ProductDetailModel.asEntity(): ProductEntity {

@@ -25,6 +25,4 @@ interface IIngredientDao {
 
     @Query("DELETE FROM ingredients")
     fun clear()
-
-
 }

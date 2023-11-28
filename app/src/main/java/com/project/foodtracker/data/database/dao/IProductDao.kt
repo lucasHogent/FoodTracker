@@ -30,7 +30,6 @@ interface IProductDao {
     fun clear()
 
     @Transaction
-    @Query("SELECT * FROM products ORDER BY title DESC")
-    fun getAllProductsLive(): List<ProductWrapper>
-
+    @Query("SELECT * FROM products WHERE title LIKE :title")
+    fun getAllProductsByTitle(title: String): List<ProductEntity>
 }

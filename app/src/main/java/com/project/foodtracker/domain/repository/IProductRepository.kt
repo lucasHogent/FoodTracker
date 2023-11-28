@@ -7,7 +7,7 @@ interface IProductRepository {
 
     val products: List<ProductModel>
     fun getProductById(productId: String): ProductDetailModel
-    fun searchAllProductsByName(name: String): List<ProductDetailModel>
+    suspend fun searchAllProductsByTitle(title: String): List<ProductModel>
     suspend fun refreshDatabase()
 
 }

@@ -1,12 +1,27 @@
 package com.project.foodtracker.data.mock
 
  import com.project.foodtracker.data.remote.dto.IngredientDto
-import com.project.foodtracker.data.remote.dto.ProductDto
-import com.project.foodtracker.data.remote.dto.ServingsDto
+ import com.project.foodtracker.data.remote.dto.ProductApiResponse
+ import com.project.foodtracker.data.remote.dto.ProductDetailDto
+ import com.project.foodtracker.data.remote.dto.ProductDto
+ import com.project.foodtracker.data.remote.dto.ServingsDto
+ import java.util.UUID
 
+/**
+ * A provider object for creating mock instances of [ProductDetailDto] for testing purposes.
+ *
+ * @see ProductDetailDto
+ * @see IngredientDto
+ * @see ServingsDto
+ */
 object MockProductDtoProvider {
-    fun createMockProductDto(): ProductDto {
-        return ProductDto(
+    /**
+     * Creates a single test instance of [ProductDetailDto] with mock data.
+     *
+     * @return A test instance of [ProductDetailDto].
+     */
+    fun createMockProductDto(): ProductDetailDto {
+        return ProductDetailDto(
             id = "123456",
             title = "Mock Product",
             breadcrumbs = listOf("Category1", "Category2"),
@@ -27,14 +42,42 @@ object MockProductDtoProvider {
             spoonacularScore = 75.5
         )
     }
-
-    fun createMockProductDtoList(count: Int): List<ProductDto> {
-        val productList = mutableListOf<ProductDto>()
+    /**
+     * Creates a list of test instances of [ProductDetailDto] with mock data.
+     *
+     * @param count The size of the list to create.
+     * @return A list of test instances of [ProductDetailDto].
+     */
+    fun createMockProductDtoList(count: Int): List<ProductDetailDto> {
+        val productList = mutableListOf<ProductDetailDto>()
         repeat(count) {
             productList.add(createMockProductDto())
         }
         return productList
     }
 
+    fun createProductApiResponse(): ProductApiResponse {
+        return ProductApiResponse(
+            products = createProductDtoList(2),
+            totalProducts = 2,
+            type = "product",
+            offset = 0,
+            number = 2
+        )
+    }
+
+    fun createProductDto() : ProductDto {
+        return ProductDto(UUID.randomUUID().toString(),
+            "Pizza Buddy: Frozen Pizza Dough, 16 Oz",
+            "jpg")
+    }
+
+    fun createProductDtoList(count: Int): List<ProductDto> {
+        val productList = mutableListOf<ProductDto>()
+        repeat(count) {
+            productList.add(createProductDto())
+        }
+        return productList
+    }
 
 }
