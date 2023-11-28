@@ -2,6 +2,7 @@ package com.project.foodtracker.data.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
+import androidx.test.platform.app.InstrumentationRegistry
 import com.project.foodtracker.data.database.dao.IProductDao
 import com.project.foodtracker.data.database.entities.asDomain
 import com.project.foodtracker.data.mock.MockProductDtoProvider
@@ -21,6 +22,11 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.util.UUID
 
+/**
+ * Unit tests for [ProductRepository].
+ *
+ * @see ProductRepository
+ */
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @SmallTest
@@ -37,9 +43,13 @@ class ProductRepositoryTest {
     fun setup() {
         productDao = mock(IProductDao::class.java)
         productApi = mock(IProductApiService::class.java)
-        productRepository = ProductRepository(productDao, productApi)
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        productRepository = ProductRepository(productDao, productApi, context)
     }
 
+    /**
+     * Test case for [ProductRepository.products].
+     */
     @Test
     fun getAllProducts_returns_productList() = testScope.runTest {
 
@@ -56,6 +66,9 @@ class ProductRepositoryTest {
 
     }
 
+    /**
+     * Test case for [ProductRepository.getProductById].
+     */
     @Test
     fun getProductById_returns_product() = testScope.runTest {
 
@@ -75,6 +88,9 @@ class ProductRepositoryTest {
 
     }
 
+    /**
+     * Test case for [ProductRepository.getProductById] when an error occurs.
+     */
     @Test
     fun getProductById_returns_nothing_trows_error() = testScope.runTest {
 
@@ -91,6 +107,9 @@ class ProductRepositoryTest {
 
     }
 
+    /**
+     * Test case for [ProductRepository.refreshDatabase].
+     */
     @Test
     fun getProductsFromApi_insertsProductEntities() = testScope.runTest {
 

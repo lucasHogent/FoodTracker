@@ -41,10 +41,6 @@ fun ProductEntity.asDomain(): ProductModel {
         id = this.productId,
         title = this.title,
         imageType = this.imageType,
-        generatedText = this.generatedText,
-        likes = this.likes,
-        spoonacularScore = this.spoonacularScore,
-        price = this.price,
     )
 }
 
