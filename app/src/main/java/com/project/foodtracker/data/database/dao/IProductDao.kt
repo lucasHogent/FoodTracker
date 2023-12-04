@@ -7,11 +7,10 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.project.foodtracker.data.database.entities.ProductEntity
 import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
-import com.project.foodtracker.data.database.wrapper.ProductWrapper
 
 @Dao
 interface IProductDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(product: ProductEntity)
     @Insert
     fun insert(productWithIngredientsCrossRef: ProductWithIngredientsCrossRef)
@@ -20,7 +19,7 @@ interface IProductDao {
 
     @Transaction
     @Query("SELECT * from products WHERE productId = :key")
-    fun get(key: String): ProductWrapper
+    fun get(key: String): ProductEntity
 
     @Transaction
     @Query("SELECT * FROM products ORDER BY productId DESC")
@@ -30,6 +29,6 @@ interface IProductDao {
     fun clear()
 
     @Transaction
-    @Query("SELECT * FROM products WHERE title LIKE :title")
+    @Query("SELECT * FROM products WHERE title LIKE '%' || :title || '%'")
     fun getAllProductsByTitle(title: String): List<ProductEntity>
 }

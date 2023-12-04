@@ -1,10 +1,10 @@
 package com.project.foodtracker.data.repository
 
+import android.net.ConnectivityManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import androidx.test.platform.app.InstrumentationRegistry
 import com.project.foodtracker.data.database.dao.IProductDao
-import com.project.foodtracker.data.database.entities.asDomain
+import com.project.foodtracker.data.database.entities.asProductModel
 import com.project.foodtracker.data.mock.MockProductDtoProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import com.project.foodtracker.data.remote.IProductApiService
@@ -43,8 +43,8 @@ class ProductRepositoryTest {
     fun setup() {
         productDao = mock(IProductDao::class.java)
         productApi = mock(IProductApiService::class.java)
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        productRepository = ProductRepository(productDao, productApi, context)
+        val connectivityManager = mock(ConnectivityManager::class.java)
+        productRepository = ProductRepository(productDao, productApi, connectivityManager)
     }
 
     /**
@@ -58,11 +58,11 @@ class ProductRepositoryTest {
         `when`(productDao.getAllProducts()).thenReturn(mockProductList)
 
         // When
-        val flowResult = productRepository.products
+        val flowResult = productRepository.getAllProducts()
 
         // Then
 
-        assertEquals(mockProductList.map { it.asDomain() }, mockProductList)
+        assertEquals(mockProductList.map { it.asProductModel() }, mockProductList)
 
     }
 
@@ -84,7 +84,7 @@ class ProductRepositoryTest {
 
         // Then
 
-        assertEquals(mockProductEntity.asDomain(), mockProductEntity)
+        assertEquals(mockProductEntity.asProductModel(), mockProductEntity)
 
     }
 

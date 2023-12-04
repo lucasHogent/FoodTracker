@@ -4,46 +4,74 @@ import com.project.foodtracker.data.database.entities.ProductEntity
 
 
 data class ProductDetailModel(
-    val id: String,
-    val title: String,
-    val breadcrumbs: List<String>,
-    val imageType: String,
-    val badges: List<String>,
-    val importantBadges: List<String>,
-    val ingredientCount: Int,
-    val generatedText: String?,
-    val ingredients: List<IngredientModel>,
-    val likes: Int,
-    val aisle: String,
-    val price: Double,
-    val servings: ServingsModel,
-    val spoonacularScore: Double
-)
 
-data class ProductModel(
-    val id: String,
+    val productId: String,
     val title: String,
-    val imageType: String
+    val image: String,
+    val imageType: String,
+    val servings: Int,
+    val readyInMinutes: Int,
+    val license: String,
+    val sourceName: String,
+    val sourceUrl: String,
+    val spoonacularSourceUrl: String,
+    val healthScore: Float,
+    val spoonacularScore: Float,
+    val pricePerServing: Float,
+    val cheap: Boolean,
+    val creditsText: String,
+    val dairyFree: Boolean,
+    val gaps: String,
+    val glutenFree: Boolean,
+    val instructions: String,
+    val ketogenic: Boolean,
+    val lowFodmap: Boolean,
+    val occasions: List<String>,
+    val sustainable: Boolean,
+    val vegan: Boolean,
+    val vegetarian: Boolean,
+    val veryHealthy: Boolean,
+    val veryPopular: Boolean,
+    val weightWatcherSmartPoints: Int,
+    val dishTypes: List<String>,
+    val summary: String,
 )
 
 fun ProductDetailModel.asEntity(): ProductEntity {
     return ProductEntity(
-        productId = this.id,
+        productId = this.productId,
         title = this.title,
-        breadcrumbs = this.breadcrumbs,
+        image = this.image,
         imageType = this.imageType,
-        badges = this.badges,
-        importantBadges = this.importantBadges,
-        ingredientCount = this.ingredientCount,
-        generatedText = this.generatedText,
-        likes = this.likes,
-        aisle = this.aisle,
+        servings = this.servings,
+        readyInMinutes = this.readyInMinutes,
+        license = this.license,
+        sourceName = this.sourceName,
+        sourceUrl = this.sourceUrl,
+        spoonacularSourceUrl = this.spoonacularSourceUrl,
+        healthScore = this.healthScore,
         spoonacularScore = this.spoonacularScore,
-        price = this.price,
-        servings = this.servings.asEntity(),
+        pricePerServing = this.pricePerServing,
+        cheap = this.cheap,
+        creditsText = this.creditsText,
+        dairyFree = this.dairyFree,
+        gaps = this.gaps,
+        glutenFree = this.glutenFree,
+        instructions = this.instructions,
+        ketogenic = this.ketogenic,
+        lowFodmap = this.lowFodmap,
+        occasions = this.occasions,
+        sustainable = this.sustainable,
+        vegan = this.vegan,
+        vegetarian = this.vegetarian,
+        veryHealthy = this.veryHealthy,
+        veryPopular = this.veryPopular,
+        weightWatcherSmartPoints = this.weightWatcherSmartPoints,
+        dishTypes = this.dishTypes,
+        summary = this.summary
     )
-
 }
+
 
 // Extension function to convert List<ProductModel> to List<ProductWithIngredientsAnsNutritionAndServingsEntity>
 fun List<ProductDetailModel>.asEntity(): List<ProductEntity> {

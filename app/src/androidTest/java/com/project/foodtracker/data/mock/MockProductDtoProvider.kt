@@ -1,11 +1,11 @@
 package com.project.foodtracker.data.mock
 
- import com.project.foodtracker.data.remote.dto.IngredientDto
- import com.project.foodtracker.data.remote.dto.ProductApiResponse
- import com.project.foodtracker.data.remote.dto.ProductDetailDto
- import com.project.foodtracker.data.remote.dto.ProductDto
- import com.project.foodtracker.data.remote.dto.ServingsDto
- import java.util.UUID
+import com.project.foodtracker.data.remote.dto.IngredientDto
+import com.project.foodtracker.data.remote.dto.ProductApiResponse
+import com.project.foodtracker.data.remote.dto.ProductDetailDto
+import com.project.foodtracker.data.remote.dto.ProductDto
+import com.project.foodtracker.data.remote.dto.ServingsDto
+import java.util.UUID
 
 /**
  * A provider object for creating mock instances of [ProductDetailDto] for testing purposes.
@@ -22,26 +22,40 @@ object MockProductDtoProvider {
      */
     fun createMockProductDto(): ProductDetailDto {
         return ProductDetailDto(
-            id = "123456",
-            title = "Mock Product",
-            breadcrumbs = listOf("Category1", "Category2"),
+            id = "716429",
+            title = "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs",
             imageType = "jpg",
-            badges = listOf("Badge1", "Badge2"),
-            importantBadges = listOf("ImportantBadge1", "ImportantBadge2"),
-            ingredientCount = 5,
-            generatedText = "Mock generated text",
-            ingredients = listOf(
-                IngredientDto("1", "Ingredient1", "Ingredient1", "High"),
-                IngredientDto("2", "Ingredient2", "Ingredient2",  "Medium"),
-                IngredientDto("3", "Ingredient3", "Ingredient3", "Low")
-            ),
-            likes = 10,
-            aisle = "Aisle1",
-            price = 15.5,
-            servings = ServingsDto(2, 150, "g"),
-            spoonacularScore = 75.5
+            image = "https://spoonacular.com/recipeImages/716429-556x370.jpg",
+            servings = 2,
+            readyInMinutes = 45,
+            license = "CC BY-SA 3.0",
+            sourceName = "Full Belly Sisters",
+            sourceUrl = "http://fullbellysisters.blogspot.com/2012/06/pasta-with-garlic-scallions-cauliflower.html",
+            spoonacularSourceUrl = "https://spoonacular.com/pasta-with-garlic-scallions-cauliflower-breadcrumbs-716429",
+            healthScore = 19.0f,
+            spoonacularScore = 83.0f,
+            pricePerServing = 163.15f,
+            cheap = false,
+            creditsText = "Full Belly Sisters",
+            dairyFree = false,
+            gaps = "no",
+            glutenFree = false,
+            instructions = "",
+            ketogenic = false,
+            lowFodmap = false,
+            occasions = emptyList(),
+            sustainable = false,
+            vegan = false,
+            vegetarian = false,
+            veryHealthy = false,
+            veryPopular = false,
+            weightWatcherSmartPoints = 17,
+            dishTypes = listOf("lunch", "main course", "main dish", "dinner"),
+            summary = "Pasta with Garlic, Scallions, Cauliflower & Breadcrumbs might be a good recipe to expand your main course repertoire. One portion of this dish contains approximately <b>19g of protein</b>, <b>20g of fat</b>, and a total of <b>584 calories</b>. For <b>$1.63 per serving</b>, this recipe <b>covers 23%</b> of your daily requirements of vitamins and minerals. This recipe serves 2. It is brought to you by fullbellysisters.blogspot.com. 209 people were glad they tried this recipe. A mixture of scallions, salt and pepper, white wine, and a handful of other ingredients are all it takes to make this recipe so scrumptious. From preparation to the plate, this recipe takes approximately <b>45 minutes</b>. All things considered, we decided this recipe <b>deserves a spoonacular score of 83%</b>. This score is awesome. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/cauliflower-gratin-with-garlic-breadcrumbs-318375\">Cauliflower Gratin with Garlic Breadcrumbs</a>, <a href=\"https://spoonacular.com/recipes/pasta-with-cauliflower-sausage-breadcrumbs-30437\">Pasta With Cauliflower, Sausage, & Breadcrumbs</a>, and <a href=\"https://spoonacular.com/recipes/pasta-with-roasted-cauliflower-parsley-and-breadcrumbs-30738\">Pasta With Roasted Cauliflower, Parsley, And Breadcrumbs</a>"
         )
     }
+
+
     /**
      * Creates a list of test instances of [ProductDetailDto] with mock data.
      *
@@ -58,18 +72,22 @@ object MockProductDtoProvider {
 
     fun createProductApiResponse(): ProductApiResponse {
         return ProductApiResponse(
-            products = createProductDtoList(2),
-            totalProducts = 2,
+            results = createProductDtoList(2),
+            totalResults = 2,
             type = "product",
             offset = 0,
             number = 2
         )
     }
 
-    fun createProductDto() : ProductDto {
-        return ProductDto(UUID.randomUUID().toString(),
-            "Pizza Buddy: Frozen Pizza Dough, 16 Oz",
-            "jpg")
+    fun createProductDto(): ProductDto {
+        return ProductDto(
+            id = UUID.randomUUID().toString(),
+            title = "Pizza Buddy: Frozen Pizza Dough, 16 Oz",
+            imageType = "jpg",
+            image = "https://spoonacular.com/recipeImages/716429-556x370.jpg",
+        )
+
     }
 
     fun createProductDtoList(count: Int): List<ProductDto> {
