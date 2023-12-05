@@ -17,7 +17,7 @@ interface IProductApiService {
     @GET("/recipes/complexSearch")
     suspend fun getProducts(
         @Query("query") title: String,
-        @Query("number") number: Int = 2,
+        @Query("number") number: Int = 10,
         @Query("offset") offset: Int = 0,): ProductApiResponse
 
     @Headers(

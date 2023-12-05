@@ -6,6 +6,7 @@ import com.project.foodtracker.domain.repository.IProductRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -24,12 +25,10 @@ class GetProductsUseCase @Inject constructor(
 
             emit(Resource.Success<List<ProductModel>>(products))
         } catch (e: HttpException) {
-            emit(
-                Resource.Error<List<ProductModel>>(
-                    e.localizedMessage ?: "An unexpected error occured"
-                )
-            )
+            Timber.e(e.localizedMessage ?: "An unexpected error occured")
+            emit(Resource.Error<List<ProductModel>>(e.localizedMessage ?: "An unexpected error occured"))
         } catch (e: IOException) {
+            Timber.e(e.localizedMessage ?: "Couldn't reach server. Check your internet connection.")
             emit(Resource.Error<List<ProductModel>>("Couldn't reach server. Check your internet connection."))
         }
     }

@@ -11,7 +11,7 @@ data class ProductDetailModel(
     val imageType: String,
     val servings: Int,
     val readyInMinutes: Int,
-    val license: String,
+    val license: String?,
     val sourceName: String,
     val sourceUrl: String,
     val spoonacularSourceUrl: String,

@@ -15,6 +15,7 @@ package com.project.foodtracker.data.repository
  import kotlinx.coroutines.Dispatchers
  import kotlinx.coroutines.withContext
  import retrofit2.HttpException
+ import timber.log.Timber
  import java.io.IOException
  import javax.inject.Inject
 
@@ -31,20 +32,16 @@ class ProductRepository @Inject constructor(
                 try {
                     // Perform API call
                     val productsFromApi = productApi.getProducts("", 10)
-
+                    Timber.i("Get products from API getProducts() %s" , productsFromApi.results.toTypedArray().contentToString())
                     val filteredProductEntities = productsFromApi.results
                         .map { it.asEntity() }
-                        .filter { product ->
-                             productDao.get(product.productId).productId != null
-                        }
 
                     productDao.insertAll(*filteredProductEntities.toTypedArray())
+                    Timber.i("Insert products from API to productDao.insertAll %s" , filteredProductEntities.toTypedArray().contentToString())
                 } catch (e: IOException) {
-                    // Handle network error
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 } catch (e: HttpException) {
-                    // Handle HTTP error (non-2xx)
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 }
             }
 
@@ -66,17 +63,16 @@ class ProductRepository @Inject constructor(
                     // Perform API call
                     val productsFromApi = productApi.getProductById(productId)
                     val productEntity = productsFromApi.asProductDetailModel().asEntity()
-                    
+                    Timber.i("Get products from API getProductById() %s" , productsFromApi)
                     // Save results in the local database
                     productDao.insert(productEntity)
+                    Timber.i("Insert product from API to productDao.insert %s" , productEntity)
                 } catch (e: IOException) {
-                    // Handle network error
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 } catch (e: HttpException) {
-                    // Handle HTTP error (non-2xx)
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 }
             }
             var product = productDao.get(productId).asProductDetailModel()
@@ -91,20 +87,22 @@ class ProductRepository @Inject constructor(
                 try {
                     // Perform API call
                     val productsFromApi = productApi.getProducts(title)
+                    Timber.i("Get products from API getProducts(%s) " , title)
+                    Timber.i("Get products from API getProducts(title) %s" , productsFromApi.results.toTypedArray())
+
                     var productEntities = productsFromApi.results.map { p -> p.asEntity() }
                     productEntities = productEntities.filter {
-                        p -> productDao.get(p.productId).productId == p.productId
+                        p -> productDao.get(p.productId) == null
                     }
                     // Save results in the local database
                     productDao.insertAll(*productEntities.toTypedArray())
+                    Timber.i("Insert products from API to productDao.insertAll %s" , productEntities.toTypedArray())
                 } catch (e: IOException) {
-                    // Handle network error
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 } catch (e: HttpException) {
-                    // Handle HTTP error (non-2xx)
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 } catch (e: Exception){
-                    e.printStackTrace()
+                    Timber.e(e.message)
                 }
             }
             var products = productDao.getAllProductsByTitle(title).map { p -> p.asProductModel() }
@@ -116,7 +114,7 @@ class ProductRepository @Inject constructor(
 
         val network = connectivityManager.activeNetwork
         val capabilities = connectivityManager.getNetworkCapabilities(network)
-
+        Timber.i("Internet is connected: %b", capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true)
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 

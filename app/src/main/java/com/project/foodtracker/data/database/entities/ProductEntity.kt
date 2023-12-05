@@ -26,7 +26,7 @@ data class ProductEntity(
 
     val servings: Int,
     val readyInMinutes: Int,
-    val license: String,
+    val license: String?,
     val sourceName: String,
     val sourceUrl: String,
     val spoonacularSourceUrl: String,
