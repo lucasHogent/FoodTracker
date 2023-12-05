@@ -14,13 +14,17 @@ interface IProductApiService {
         "x-api-key: ${Constants.API_KEY}",
         "Accept: */*",
         )
-    @GET("/food/products/search")
+    @GET("/recipes/complexSearch")
     suspend fun getProducts(
         @Query("query") title: String,
-        @Query("number") number: Int = 30,
+        @Query("number") number: Int = 2,
         @Query("offset") offset: Int = 0,): ProductApiResponse
 
-    @GET("/food/products/:id?")
-    suspend fun getProductById(@Path("id") productId: String): ProductDetailDto
+    @Headers(
+        "x-api-key: ${Constants.API_KEY}",
+        "Accept: */*",
+    )
+    @GET("/recipes/{id}/information")
+    suspend fun getProductById(@Path("id") id: String): ProductDetailDto
 
 }

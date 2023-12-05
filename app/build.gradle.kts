@@ -76,6 +76,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("org.mockito:mockito-android:5.7.0")
     testImplementation("junit:junit:4.13.2")
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
 
@@ -110,6 +112,11 @@ dependencies {
     kaptAndroidTest("com.google.dagger:hilt-compiler:$hilt_version")
     testImplementation("com.google.dagger:hilt-android-testing:$hilt_version")
     kaptTest("com.google.dagger:hilt-compiler:$hilt_version")
+
+    implementation("androidx.hilt:hilt-navigation-fragment:1.1.0")
+    implementation("androidx.hilt:hilt-work:1.1.0")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     // RetroFit for Api calls
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
