@@ -30,7 +30,6 @@ class ProductRepository @Inject constructor(
             // Check for internet connectivity
             if (isInternetConnected()) {
                 try {
-                    // Perform API call
                     val productsFromApi = productApi.getProducts("", 10)
                     Timber.i("Get products from API getProducts() %s" , productsFromApi.results.toTypedArray().contentToString())
                     val filteredProductEntities = productsFromApi.results
@@ -75,7 +74,7 @@ class ProductRepository @Inject constructor(
                     Timber.e(e.message)
                 }
             }
-            var product = productDao.get(productId).asProductDetailModel()
+            val product = productDao.get(productId).asProductDetailModel()
             return@withContext product
         }
     }
@@ -92,7 +91,8 @@ class ProductRepository @Inject constructor(
 
                     var productEntities = productsFromApi.results.map { p -> p.asEntity() }
                     productEntities = productEntities.filter {
-                        p -> productDao.get(p.productId) == null
+                        p ->
+                        false
                     }
                     // Save results in the local database
                     productDao.insertAll(*productEntities.toTypedArray())
@@ -105,7 +105,7 @@ class ProductRepository @Inject constructor(
                     Timber.e(e.message)
                 }
             }
-            var products = productDao.getAllProductsByTitle(title).map { p -> p.asProductModel() }
+            val products = productDao.getAllProductsByTitle(title).map { p -> p.asProductModel() }
             return@withContext products
         }
     }
