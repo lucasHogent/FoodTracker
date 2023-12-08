@@ -1,7 +1,7 @@
 package com.project.foodtracker.domain.use_case
 
 import com.project.foodtracker.common.Resource
-import com.project.foodtracker.domain.model.ProductDetailModel
+import com.project.foodtracker.domain.model.ProductModel
 import com.project.foodtracker.domain.repository.IFavoritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,23 +10,22 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-class GetFavoriteProductUseCase @Inject constructor(
+class GetFavoritesUseCase @Inject constructor(
     private val repository: IFavoritesRepository
 ) {
-
-    operator fun invoke(productId : String): Flow<Resource<ProductDetailModel>> = flow {
+    operator fun invoke(): Flow<Resource<List<ProductModel>>> = flow {
         try {
-            emit(Resource.Loading<ProductDetailModel>())
+            emit(Resource.Loading<List<ProductModel>>())
+            var products = emptyList<ProductModel>()
+                products = repository.getAllFavoriteProducts()
 
-            var favorite = repository.getFavoriteProduct(productId)
-
-            emit(Resource.Success<ProductDetailModel>(favorite))
+            emit(Resource.Success<List<ProductModel>>(products))
         } catch (e: HttpException) {
             Timber.e(e.localizedMessage ?: "An unexpected error occured")
-            emit(Resource.Error<ProductDetailModel>(e.localizedMessage ?: "An unexpected error occured"))
+            emit(Resource.Error<List<ProductModel>>(e.localizedMessage ?: "An unexpected error occured"))
         } catch (e: IOException) {
             Timber.e(e.localizedMessage ?: "Couldn't reach server. Check your internet connection.")
-            emit(Resource.Error<ProductDetailModel>("Couldn't reach server. Check your internet connection."))
+            emit(Resource.Error<List<ProductModel>>("Couldn't reach server. Check your internet connection."))
         }
     }
 }

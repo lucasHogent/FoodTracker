@@ -43,7 +43,7 @@ fun FoodTrackerBottomNavBar(navController: NavController) {
             },
             alwaysShowLabel = true,
             selected = false,
-            onClick = { },
+            onClick = { navController.navigate(Screen.Favorites.route)},
             modifier = Modifier
                 .weight(weight = 0.33f)
         )

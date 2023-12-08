@@ -18,7 +18,9 @@ class MainActivity : ComponentActivity() {
         Timber.plant(Timber.DebugTree())
         setContent {
             val navController = rememberNavController()
-            FoodTrackerApp(navController)
+            FoodTrackerTheme {
+                FoodTrackerApp(navController)
+            }
         }
     }
 }
