@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import com.project.foodtracker.data.database.FoodTrackerDatabase
+import com.project.foodtracker.data.database.dao.IFavoriteProductDao
 import com.project.foodtracker.data.database.dao.IProductDao
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +29,10 @@ object DatabaseModule {
     @Provides
     fun provideProductDao(database: FoodTrackerDatabase): IProductDao {
         return database.productDao()
+    }
+
+    @Provides
+    fun provideFavoriteProductDao(database: FoodTrackerDatabase): IFavoriteProductDao {
+        return database.favoriteProductDao()
     }
 }

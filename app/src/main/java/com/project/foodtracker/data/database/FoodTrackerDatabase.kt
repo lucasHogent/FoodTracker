@@ -6,6 +6,8 @@ import androidx.room.TypeConverters
 import com.project.foodtracker.data.database.dao.IFavoriteProductDao
 import com.project.foodtracker.data.database.dao.IIngredientDao
 import com.project.foodtracker.data.database.dao.IProductDao
+import com.project.foodtracker.data.database.entities.FavoriteEntity
+import com.project.foodtracker.data.database.entities.FavoriteWithProduct
 import com.project.foodtracker.data.database.entities.IngredientEntity
 import com.project.foodtracker.data.database.entities.ProductEntity
 import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
@@ -13,6 +15,7 @@ import com.project.foodtracker.data.database.entities.ProductWithIngredientsCros
 @Database(entities = [
     ProductEntity::class,
     ProductWithIngredientsCrossRef::class,
+    FavoriteEntity::class,
     IngredientEntity::class],
     exportSchema = true,
     version = 1)

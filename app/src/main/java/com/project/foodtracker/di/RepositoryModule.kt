@@ -1,6 +1,8 @@
 package com.project.foodtracker.di
 
+import com.project.foodtracker.data.repository.FavoritesRepository
 import com.project.foodtracker.data.repository.ProductRepository
+import com.project.foodtracker.domain.repository.IFavoritesRepository
 import com.project.foodtracker.domain.repository.IProductRepository
 import dagger.Binds
 import dagger.Module
@@ -15,6 +17,10 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindProductRepository(impl: ProductRepository): IProductRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindFavoriteRepository(impl: FavoritesRepository): IFavoritesRepository
 
 
 }
