@@ -89,13 +89,15 @@ class ProductRepository @Inject constructor(
                     Timber.i("Get products from API getProducts(%s) " , title)
                     Timber.i("Get products from API getProducts(title) %s" , productsFromApi.results.toTypedArray())
 
-                    var productEntities = productsFromApi.results.map { p -> p.asEntity() }
-                    productEntities = productEntities.filter {
-                        p ->
-                        false
+                    val productEntities = productsFromApi.results.map { p -> p.asEntity() }
+
+                    val newProducts = productEntities.filterNot { apiProduct ->
+                        val dbProduct = productDao.get(apiProduct.productId)
+                        dbProduct != null && dbProduct.title == apiProduct.title
                     }
+
                     // Save results in the local database
-                    productDao.insertAll(*productEntities.toTypedArray())
+                    productDao.insertAll(*newProducts.toTypedArray())
                     Timber.i("Insert products from API to productDao.insertAll %s" , productEntities.toTypedArray())
                 } catch (e: IOException) {
                     Timber.e(e.message)

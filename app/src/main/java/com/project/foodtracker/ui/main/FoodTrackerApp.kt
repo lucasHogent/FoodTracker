@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.project.foodtracker.ui.Screen
 import com.project.foodtracker.ui.discover.DiscoverScreen
+import com.project.foodtracker.ui.favorites.FavoritesScreen
 import com.project.foodtracker.ui.main.components.FoodTrackerBottomNavBar
 import com.project.foodtracker.ui.product.ProductDetailScreen
 
@@ -39,11 +40,9 @@ fun FoodTrackerApp(navController: NavHostController = rememberNavController()) {
         ) {
 
             composable(Screen.Discover.route) { DiscoverScreen(navController) }
+            composable(Screen.Favorites.route) { FavoritesScreen(navController) }
             composable(Screen.ProductDetail.route + "/{productId}") {
                 ProductDetailScreen(navController) }
-
-            //composable(Screen.Search.route) { SearchScreen() }
-            //composable(Screen.Profile.route) { ProfileScreen() }
 
         }
     }

@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.project.foodtracker.domain.model.ProductDetailModel
+import com.project.foodtracker.ui.Screen
 import com.project.foodtracker.ui.product.components.AddToFavoritesButton
 import com.project.foodtracker.ui.product.components.DishType
 import com.project.foodtracker.ui.product.components.OccasionItem
@@ -64,7 +66,10 @@ fun ProductDetailScreen(
                     .fillMaxWidth()
                     .statusBarsPadding(),
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    })
+                    {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Detail"
@@ -96,10 +101,10 @@ fun ProductDetailScreen(
                         else
                             viewModel.addToFavorites(it.productId)
                         scope.launch {
-                            if(!isFavorite)
-                            snackbarHostState.showSnackbar(
-                                "Added ${it.title} to favorites"
-                            )
+                            if (!isFavorite)
+                                snackbarHostState.showSnackbar(
+                                    "Added ${it.title} to favorites"
+                                )
                             else
                                 snackbarHostState.showSnackbar(
                                     "Removed ${it.title} from favorites"
@@ -115,7 +120,6 @@ fun ProductDetailScreen(
 
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProductDetailSection(
     modifier: Modifier = Modifier,
@@ -129,121 +133,27 @@ fun ProductDetailSection(
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Text(
-                            text = product.title,
-                            style =  MaterialTheme.typography.labelLarge.copy(fontSize = 24.sp),
-                            modifier = Modifier.weight(20f)
-                        )
-                        Text(
-                            text = "Score: ${product.healthScore}",
-                            textAlign = TextAlign.End,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.weight(8f)
-                        )
-                    }
-                    Row(){
-
-                        Text(
-                            text = if (product.cheap) "cheap" else "expensive",
-                            color = if (product.cheap) Color.Green else Color.Red,
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier
-                                .align(CenterVertically)
-                                .weight(2f)
-                        )
-                    }
+                    ProductTitleAndScore(product = product)
+                    ProductPriceAndImage(product = product)
                     Spacer(modifier = Modifier.height(15.dp))
-                    Row(){
-
-                        AsyncImage(
-                            model = product.image,
-                            contentDescription = "Product Image",
-                            contentScale = ContentScale.Crop, // Adjust contentScale as needed
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .padding(4.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(MaterialTheme.colorScheme.primary)
-                        )
-
-                        Divider()
-                    }
+                    Text("Instructions", style = MaterialTheme.typography.bodyLarge)
                     Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "Instructions",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text(text = product.instructions, style = MaterialTheme.typography.bodyMedium)
                     Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = product.instructions,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Text("DishTypes", style = MaterialTheme.typography.bodyLarge)
                     Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "DishTypes",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    FlowRow(
-
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        product.dishTypes.forEach { type ->
-                            DishType(type = type)
-                        }
-                    }
+                    DishTypesRow(product = product)
                     Spacer(modifier = Modifier.height(15.dp))
                     Divider()
                     Spacer(modifier = Modifier.height(15.dp))
-
-                    Text(
-                        text = "Servings: ${product.servings}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Ready in Minutes: ${product.readyInMinutes}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Source: ${product.sourceName}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Spoonacular Source: ${product.spoonacularSourceUrl}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "License: ${product.license ?: "N/A"}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Price Per Serving: ${product.pricePerServing}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "Credits: ${product.creditsText}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-
+                    ProductDetailsInfo(product = product)
                     Spacer(modifier = Modifier.height(15.dp))
-                    Text(
-                        text = "Occasions",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    Text("Occasions", style = MaterialTheme.typography.bodyLarge)
                 }
                 items(product.occasions) { occasion ->
                     OccasionItem(
                         occasion = occasion,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
+                        modifier = Modifier.fillMaxWidth().padding(10.dp)
                     )
                     Divider()
                 }
@@ -252,4 +162,72 @@ fun ProductDetailSection(
         }
 
     }
+}
+
+@Composable
+private fun ProductTitleAndScore(product: ProductDetailModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = product.title,
+            style = MaterialTheme.typography.labelLarge.copy(fontSize = 24.sp),
+            modifier = Modifier.weight(20f)
+        )
+        Text(
+            text = "Score: ${product.healthScore}",
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(8f)
+        )
+    }
+}
+
+@Composable
+private fun ProductPriceAndImage(product: ProductDetailModel) {
+    Row {
+        Text(
+            text = if (product.cheap) "cheap" else "expensive",
+            color = if (product.cheap) Color.Green else Color.Red,
+            fontStyle = FontStyle.Italic,
+            textAlign = TextAlign.End,
+            modifier = Modifier.align(CenterVertically).weight(2f)
+        )
+    }
+    Spacer(modifier = Modifier.height(15.dp))
+    Row {
+        AsyncImage(
+            model = product.image,
+            contentDescription = "Product Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth()
+                .aspectRatio(1f)
+                .padding(4.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.primary)
+        )
+        Divider()
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun DishTypesRow(product: ProductDetailModel) {
+    FlowRow(modifier = Modifier.fillMaxWidth()) {
+        product.dishTypes.forEach { type ->
+            DishType(type = type)
+        }
+    }
+}
+
+@Composable
+private fun ProductDetailsInfo(product: ProductDetailModel) {
+    Text("Servings: ${product.servings}", style = MaterialTheme.typography.bodyMedium)
+    Text("Ready in Minutes: ${product.readyInMinutes}", style = MaterialTheme.typography.bodyMedium)
+    Text("Source: ${product.sourceName}", style = MaterialTheme.typography.bodyMedium)
+    Text("Spoonacular Source: ${product.spoonacularSourceUrl}", style = MaterialTheme.typography.bodyMedium)
+    Text("License: ${product.license ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
+    Text("Price Per Serving: ${product.pricePerServing}", style = MaterialTheme.typography.bodyMedium)
+    Text("Credits: ${product.creditsText}", style = MaterialTheme.typography.bodyMedium)
 }
