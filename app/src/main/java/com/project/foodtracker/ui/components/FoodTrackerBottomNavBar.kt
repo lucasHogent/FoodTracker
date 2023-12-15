@@ -1,4 +1,4 @@
-package com.project.foodtracker.ui.main.components
+package com.project.foodtracker.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Face
@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.em
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.project.foodtracker.ui.Screen
+import com.project.foodtracker.ui.util.Screen
 
 
 @Composable
@@ -50,7 +50,7 @@ fun FoodTrackerBottomNavBar(navController: NavController) {
         NavigationBarItem(
             alwaysShowLabel = true,
             selected = false,
-            onClick = {  },
+            onClick = { navController.navigate(Screen.Home.route)},
  
             modifier = Modifier.weight(weight = 0.33f),
             icon = {

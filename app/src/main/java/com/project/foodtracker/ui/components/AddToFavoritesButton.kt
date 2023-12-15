@@ -1,15 +1,11 @@
-package com.project.foodtracker.ui.product.components
+package com.project.foodtracker.ui.components
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddToFavoritesButton(
@@ -18,9 +14,6 @@ fun AddToFavoritesButton(
 ) {
     FloatingActionButton(
         onClick = onClick,
-        modifier = Modifier
-            .padding(16.dp)
-            .size(56.dp)
     ) {
         if (isFavorite)
             Icon(

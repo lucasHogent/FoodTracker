@@ -8,10 +8,9 @@ import com.project.foodtracker.data.database.entities.asProductModel
 import com.project.foodtracker.data.mock.MockProductDtoProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import com.project.foodtracker.data.remote.IProductApiService
-import com.project.foodtracker.domain.model.ProductDetailModel
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -79,7 +78,7 @@ class ProductRepositoryTest {
         mockProductEntity.copy(productId = productId)
 
         // When
-        // `when`(productDao.get(productId)).thenReturn(flow { emit(createMockProductDetailEntity()) })
+        //`when`(productDao.get(productId)).thenReturn(flow { emit(createMockProductDetailEntity()) })
         val flowResult = productRepository.getProductById(productId)
 
         // Then
@@ -102,8 +101,7 @@ class ProductRepositoryTest {
         val flowResult = productRepository.getProductById(productId)
 
         // Then
-
-        assertEquals(emptyList<ProductDetailModel>(), flowResult)
+        assertNull(flowResult)
 
     }
 
@@ -118,7 +116,7 @@ class ProductRepositoryTest {
 
         // When
 
-        productRepository.refreshDatabase()
+        productRepository.clear()
 
     }
 
