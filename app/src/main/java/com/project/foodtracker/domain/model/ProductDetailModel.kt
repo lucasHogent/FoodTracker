@@ -72,6 +72,14 @@ fun ProductDetailModel.asEntity(): ProductEntity {
     )
 }
 
+fun ProductDetailModel.asProductModel(): ProductModel {
+    return ProductModel(
+        id = this.productId,
+        title = this.title,
+        image = this.image,
+        imageType = this.imageType
+    )
+}
 
 // Extension function to convert List<ProductModel> to List<ProductWithIngredientsAnsNutritionAndServingsEntity>
 fun List<ProductDetailModel>.asEntity(): List<ProductEntity> {

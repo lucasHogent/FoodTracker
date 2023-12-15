@@ -9,13 +9,18 @@ import com.project.foodtracker.domain.use_case.AddToFavoritesUseCase
 import com.project.foodtracker.domain.use_case.GetFavoriteProductUseCase
 import com.project.foodtracker.domain.use_case.GetProductDetailUseCase
 import com.project.foodtracker.domain.use_case.RemoveFromFavoritesUseCase
+import com.project.foodtracker.domain.use_case.UpsertProductUseCase
+import com.project.foodtracker.ui.util.Screen
+import com.project.foodtracker.ui.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -27,8 +32,12 @@ class ProductDetailViewModel @Inject constructor(
     private val addToFavoritesUseCase: AddToFavoritesUseCase,
     private val getFavoriteProductUseCase: GetFavoriteProductUseCase,
     private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase,
+    private val upsertProductUseCase: UpsertProductUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val _uiEvent =  Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     private val _productState = MutableStateFlow(ProductDetailState())
     val productState: StateFlow<ProductDetailState> = _productState
@@ -57,6 +66,7 @@ class ProductDetailViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 removeFromFavoritesUseCase(productId)
                 isFavoriteProduct(productId)
+
             }
         }
     }
@@ -95,5 +105,38 @@ class ProductDetailViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: ProductDetailEvent) {
+        when (event) {
+            is ProductDetailEvent.OnAddFavoriteProductClick -> {
+                addToFavorites(event.product.productId)
+                sendUiEvent(
+                    UiEvent.ShowSnackbar(
+                        message = "Added ${event.product.title} to favorites",
+                        action = "Undo"
+                    )
+                )
+            }
+            is ProductDetailEvent.OnRemoveFavoriteProductClick -> {
+                removeFromFavorites(event.product.productId)
+                sendUiEvent(
+                    UiEvent.ShowSnackbar(
+                        message = "Removed ${event.product.title} from favorites",
+                        action = "Undo"
+                    )
+                )
+            }
+            is ProductDetailEvent.OnClickEditProductDetail -> {
+                sendUiEvent(UiEvent.Navigate(Screen.ProductDetailEdit.route + "?productId=${event.productId}"))
+            }
+            else -> {Unit}
+        }
+    }
+
+    private fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
+        }
     }
 }

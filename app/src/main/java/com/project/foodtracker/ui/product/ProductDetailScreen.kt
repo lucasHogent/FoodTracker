@@ -1,59 +1,60 @@
 package com.project.foodtracker.ui.product
 
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.project.foodtracker.domain.model.ProductDetailModel
-import com.project.foodtracker.ui.Screen
-import com.project.foodtracker.ui.product.components.AddToFavoritesButton
-import com.project.foodtracker.ui.product.components.DishType
-import com.project.foodtracker.ui.product.components.OccasionItem
-import kotlinx.coroutines.launch
+import com.project.foodtracker.ui.components.AddToFavoritesButton
+import com.project.foodtracker.ui.product.components.ProductDetailSection
+import com.project.foodtracker.ui.util.UiEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
     navController: NavController,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ProductDetailViewModel = hiltViewModel(),
 ) {
 
     val state by viewModel.productState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val isFavorite by viewModel.isFavoriteProduct.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is UiEvent.PopBackStack -> navController.popBackStack()
+                is UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(
+                        message = event.message,
+                    )
+
+                }
+                is UiEvent.Navigate -> onNavigate(event)
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -86,148 +87,54 @@ fun ProductDetailScreen(
                     .fillMaxSize()
                     .padding(it)
             ) {
-                ProductDetailSection(modifier = Modifier.padding(it), state)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    ProductDetailSection(
+                        modifier = Modifier.padding(it), state
+                    )
+                }
             }
+
         },
         floatingActionButton = {
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(8.dp), // Adjust the spacing as needed
+            ) {
+                AddToFavoritesButton(
+                    isFavorite = isFavorite,
+                    onClick = {
 
-            AddToFavoritesButton(
-                isFavorite = isFavorite,
-                onClick = {
-                    val selectedProduct = viewModel.productState.value
-                    selectedProduct.product?.let {
-                        if (isFavorite)
-                            viewModel.removeFromFavorites(it.productId)
-                        else
-                            viewModel.addToFavorites(it.productId)
-                        scope.launch {
-                            if (!isFavorite)
-                                snackbarHostState.showSnackbar(
-                                    "Added ${it.title} to favorites"
-                                )
+                        val selectedProduct = viewModel.productState.value
+                        selectedProduct.product?.let {
+                            if (isFavorite)
+                                viewModel.onEvent(ProductDetailEvent.OnRemoveFavoriteProductClick(selectedProduct.product))
                             else
-                                snackbarHostState.showSnackbar(
-                                    "Removed ${it.title} from favorites"
-                                )
-
+                                viewModel.onEvent(ProductDetailEvent.OnAddFavoriteProductClick(selectedProduct.product))
                         }
                     }
-                },
-
                 )
+
+                FloatingActionButton(onClick = {
+                    state.product?.let {
+                        ProductDetailEvent.OnClickEditProductDetail(
+                            it.productId)
+                    }?.let { viewModel.onEvent(it) }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit"
+                    )
+                }
+            }
+
+
         },
     )
-
 }
 
-@Composable
-fun ProductDetailSection(
-    modifier: Modifier = Modifier,
-    state: ProductDetailState
-) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        state.product?.let { product ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(20.dp)
-            ) {
-                item {
-                    ProductTitleAndScore(product = product)
-                    ProductPriceAndImage(product = product)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text("Instructions", style = MaterialTheme.typography.bodyLarge)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text(text = product.instructions, style = MaterialTheme.typography.bodyMedium)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text("DishTypes", style = MaterialTheme.typography.bodyLarge)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    DishTypesRow(product = product)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.height(15.dp))
-                    ProductDetailsInfo(product = product)
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Text("Occasions", style = MaterialTheme.typography.bodyLarge)
-                }
-                items(product.occasions) { occasion ->
-                    OccasionItem(
-                        occasion = occasion,
-                        modifier = Modifier.fillMaxWidth().padding(10.dp)
-                    )
-                    Divider()
-                }
-
-            }
-        }
-
-    }
-}
-
-@Composable
-private fun ProductTitleAndScore(product: ProductDetailModel) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = product.title,
-            style = MaterialTheme.typography.labelLarge.copy(fontSize = 24.sp),
-            modifier = Modifier.weight(20f)
-        )
-        Text(
-            text = "Score: ${product.healthScore}",
-            textAlign = TextAlign.End,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(8f)
-        )
-    }
-}
-
-@Composable
-private fun ProductPriceAndImage(product: ProductDetailModel) {
-    Row {
-        Text(
-            text = if (product.cheap) "cheap" else "expensive",
-            color = if (product.cheap) Color.Green else Color.Red,
-            fontStyle = FontStyle.Italic,
-            textAlign = TextAlign.End,
-            modifier = Modifier.align(CenterVertically).weight(2f)
-        )
-    }
-    Spacer(modifier = Modifier.height(15.dp))
-    Row {
-        AsyncImage(
-            model = product.image,
-            contentDescription = "Product Image",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth()
-                .aspectRatio(1f)
-                .padding(4.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primary)
-        )
-        Divider()
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun DishTypesRow(product: ProductDetailModel) {
-    FlowRow(modifier = Modifier.fillMaxWidth()) {
-        product.dishTypes.forEach { type ->
-            DishType(type = type)
-        }
-    }
-}
-
-@Composable
-private fun ProductDetailsInfo(product: ProductDetailModel) {
-    Text("Servings: ${product.servings}", style = MaterialTheme.typography.bodyMedium)
-    Text("Ready in Minutes: ${product.readyInMinutes}", style = MaterialTheme.typography.bodyMedium)
-    Text("Source: ${product.sourceName}", style = MaterialTheme.typography.bodyMedium)
-    Text("Spoonacular Source: ${product.spoonacularSourceUrl}", style = MaterialTheme.typography.bodyMedium)
-    Text("License: ${product.license ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
-    Text("Price Per Serving: ${product.pricePerServing}", style = MaterialTheme.typography.bodyMedium)
-    Text("Credits: ${product.creditsText}", style = MaterialTheme.typography.bodyMedium)
-}

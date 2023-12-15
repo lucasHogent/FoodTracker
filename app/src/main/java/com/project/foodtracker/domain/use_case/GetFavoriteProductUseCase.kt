@@ -10,10 +10,24 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
+/**
+ * Use case for retrieving a favorite product by its ID.
+ *
+ * @property repository The repository for managing favorites data.
+ */
 class GetFavoriteProductUseCase @Inject constructor(
     private val repository: IFavoritesRepository
 ) {
 
+    /**
+     * Retrieves a favorite product by its ID.
+     *
+     * @param productId The ID of the favorite product to retrieve.
+     * @return A [Flow] emitting [Resource] representing the state of the operation.
+     *   - [Resource.Loading] when the operation is in progress.
+     *   - [Resource.Success] with the retrieved [ProductDetailModel] when successful.
+     *   - [Resource.Error] with an error message when an unexpected error occurs.
+     */
     operator fun invoke(productId : String): Flow<Resource<ProductDetailModel>> = flow {
         try {
             emit(Resource.Loading<ProductDetailModel>())

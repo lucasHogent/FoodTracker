@@ -35,4 +35,8 @@ class FavoritesRepository @Inject constructor(
         Timber.i("deleteFavorite: Deleting %s", productId)
         var favoriteWithProduct = favoritesDao.deleteFavoriteByProductId(productId)
     }
+
+    override suspend fun clear() {
+        favoritesDao.clear()
+    }
 }

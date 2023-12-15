@@ -6,8 +6,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.project.foodtracker.data.database.FoodTrackerTestDatabase
 import com.project.foodtracker.data.database.dao.IProductDao
 import com.project.foodtracker.data.database.entities.ProductWithIngredientsCrossRef
-import com.project.foodtracker.data.database.wrapper.ProductWrapper
-import com.project.foodtracker.data.mock.MockIngredientEntityProvider
+ import com.project.foodtracker.data.mock.MockIngredientEntityProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -59,7 +58,7 @@ class ProductDaoTest {
         val productFromDb = productDao.get(productId)
 
         // Then the loaded data should match the original product
-        assertEquals(productFromDb, ProductWrapper(product, emptyList()))
+        assertEquals(productFromDb, product)
 
     }
 

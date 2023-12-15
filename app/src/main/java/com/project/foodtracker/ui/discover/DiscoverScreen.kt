@@ -2,48 +2,55 @@ package com.project.foodtracker.ui.discover
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.project.foodtracker.ui.discover.components.SearchBarSection
-import com.project.foodtracker.ui.product_list.ProductListScreen
+import com.project.foodtracker.ui.product_list.ProductListOverview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiscoverScreen(
     navController: NavController,
-    viewModel: DiscoverViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
 
-    val searchName by viewModel.searchString.collectAsState()
 
     Scaffold(
         topBar = {
-            SearchBarSection(
-                searchText = searchName,
-                onSearchNameChange = viewModel::searchNameChanged,
-                onSearchClick = {
-                    viewModel.searchProduct(searchName)
+            TopAppBar(
+                title = {
+                    Text(text = "Discover products")
                 },
-                onClearInput = viewModel::clearInput
+                modifier = Modifier
+                    .padding(vertical = 12.dp, horizontal = 15.dp)
+                    .fillMaxWidth()
+                    .statusBarsPadding(),
             )
         }
     ) { contentPadding ->
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(contentPadding)){
-            ProductListScreen(Modifier.padding(contentPadding),
-                state = viewModel.productListState,
-                navController)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+        ) {
+            ProductListOverview(
+                onNavigate = {
+                    navController.navigate(it.route)
+                },
+                searchVisible = true,
+                modifier = modifier.padding(contentPadding),
+                favoriteProducts = false,
+            )
         }
 
     }
