@@ -32,11 +32,10 @@ class ProductDetailViewModel @Inject constructor(
     private val addToFavoritesUseCase: AddToFavoritesUseCase,
     private val getFavoriteProductUseCase: GetFavoriteProductUseCase,
     private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase,
-    private val upsertProductUseCase: UpsertProductUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiEvent =  Channel<UiEvent>()
+    private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private val _productState = MutableStateFlow(ProductDetailState())
@@ -118,6 +117,7 @@ class ProductDetailViewModel @Inject constructor(
                     )
                 )
             }
+
             is ProductDetailEvent.OnRemoveFavoriteProductClick -> {
                 removeFromFavorites(event.product.productId)
                 sendUiEvent(
@@ -127,10 +127,14 @@ class ProductDetailViewModel @Inject constructor(
                     )
                 )
             }
+
             is ProductDetailEvent.OnClickEditProductDetail -> {
                 sendUiEvent(UiEvent.Navigate(Screen.ProductDetailEdit.route + "?productId=${event.productId}"))
             }
-            else -> {Unit}
+
+            else -> {
+                Unit
+            }
         }
     }
 
