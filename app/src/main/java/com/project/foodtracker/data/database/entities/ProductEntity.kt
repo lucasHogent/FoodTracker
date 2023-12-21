@@ -59,6 +59,7 @@ data class ProductEntity(
     val dishTypes: List<String>,
 
     val summary: String,
+    val deleted: Boolean,
 
     )
 

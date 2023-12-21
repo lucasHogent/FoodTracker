@@ -36,6 +36,10 @@ class ProductRepository @Inject constructor(
                         productsFromApi.results.toTypedArray().contentToString()
                     )
                     val filteredProductEntities = productsFromApi.results
+                        .filter { product ->
+                            productDao.get(product.id)?.productId == null
+                                    || productDao.get(product.id)?.productId != product.id
+                        }
                         .map { it.asEntity() }
 
                     productDao.insertAll(*filteredProductEntities.toTypedArray())
@@ -67,8 +71,10 @@ class ProductRepository @Inject constructor(
     }
 
     override suspend fun deleteProduct(productId: String) {
-        Timber.i("Delete product with id %s", productId )
-        productDao.delete(productId)
+        Timber.i("Soft delete product with id %s", productId )
+        var product = productDao.get(productId)
+        product = product.copy(deleted = true)
+        productDao.insert(product)
     }
 
     override suspend fun clear() {

@@ -11,12 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.project.foodtracker.ui.product.ProductDetailEvent
 import com.project.foodtracker.ui.product.ProductDetailState
+import com.project.foodtracker.ui.product.ProductDetailViewModel
 import com.project.foodtracker.ui.product_edit.ProductDetailEditEvent
-import com.project.foodtracker.ui.product_edit.ProductDetailEditViewModel
 
 @Composable
-fun EditProductSection(state: ProductDetailState, viewModel: ProductDetailEditViewModel) {
+fun EditProductSection(state: ProductDetailState, viewModel: ProductDetailViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.product?.let { editProduct ->
             LazyColumn(

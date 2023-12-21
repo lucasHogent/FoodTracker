@@ -7,7 +7,3 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.48" apply false
     id("org.jetbrains.dokka") version "1.9.10"
 }
-
-tasks.dokkaHtml.configure {
-    outputDirectory.set(file("../docs/html"))
-}

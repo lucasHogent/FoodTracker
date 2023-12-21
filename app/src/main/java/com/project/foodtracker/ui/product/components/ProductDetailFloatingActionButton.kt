@@ -9,15 +9,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import com.project.foodtracker.domain.model.ProductDetailModel
 import com.project.foodtracker.ui.components.AddToFavoritesButton
 import com.project.foodtracker.ui.product.ProductDetailEvent
 import com.project.foodtracker.ui.product.ProductDetailState
 import com.project.foodtracker.ui.product.ProductDetailViewModel
 
 @Composable
-fun ProductDetailFloatingActionButton(isFavorite: Boolean,
-                                      viewModel: ProductDetailViewModel,
-                                      state: ProductDetailState
+fun ProductDetailFloatingActionButton(
+    isFavorite: Boolean,
+    onRemoveFavorite: (ProductDetailModel) -> Unit,
+    onAddFavorite: (ProductDetailModel) -> Unit,
+    onClickEdit: (String) -> Unit,
+    state: ProductDetailState
 ) {
     Column(
         horizontalAlignment = Alignment.End,
@@ -29,17 +33,17 @@ fun ProductDetailFloatingActionButton(isFavorite: Boolean,
                 val selectedProduct = state.product
                 selectedProduct?.let {
                     if (isFavorite)
-                        viewModel.onEvent(ProductDetailEvent.OnRemoveFavoriteProductClick(selectedProduct))
+                        onRemoveFavorite(selectedProduct)
                     else
-                        viewModel.onEvent(ProductDetailEvent.OnAddFavoriteProductClick(selectedProduct))
+                        onAddFavorite(selectedProduct)
                 }
             }
         )
 
         FloatingActionButton(onClick = {
             state.product?.let {
-                viewModel.onEvent(ProductDetailEvent.OnClickEditProductDetail(it.productId))
-            }
+                onClickEdit(it.productId)
+             }
         }) {
             Icon(
                 imageVector = Icons.Default.Edit,

@@ -18,7 +18,7 @@ import com.project.foodtracker.data.database.entities.ProductWithIngredientsCros
     FavoriteEntity::class,
     IngredientEntity::class],
     exportSchema = true,
-    version = 1)
+    version = 2)
 @TypeConverters(StringListConverter::class)
 abstract class FoodTrackerDatabase : RoomDatabase() {
     abstract fun productDao(): IProductDao

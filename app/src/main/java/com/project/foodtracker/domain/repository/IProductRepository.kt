@@ -50,7 +50,7 @@ interface IProductRepository {
     suspend fun updateProduct(product: ProductDetailModel)
 
     /**
-     * deletes the details of a product in the repository.
+     * soft deletes the details of a product in the repository.
      *
      * @param productId The id of the product.
      */

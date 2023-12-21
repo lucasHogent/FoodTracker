@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("org.jetbrains.dokka")
+    id("org.jetbrains.dokka") version "1.9.10"
     kotlin("kapt")
 }
 
@@ -62,35 +62,37 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
     implementation("androidx.test:core-ktx:1.5.0")
     implementation("androidx.media3:media3-test-utils:1.2.0")
     implementation("com.google.android.datatransport:transport-runtime:3.2.0")
     implementation("com.google.android.engage:engage-core:1.3.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("org.mockito:mockito-android:5.7.0")
+    implementation("androidx.test:runner:1.5.2")
+    implementation("com.google.ar:core:1.41.0")
     testImplementation("junit:junit:4.13.2")
     implementation("io.coil-kt:coil:2.5.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.6")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
 
     // Room Database dependencies
     val room_version = "2.6.0"
@@ -131,6 +133,12 @@ kapt {
     correctErrorTypes = true
 }
 
+
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
 }
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(file("dokka"))
+}
+

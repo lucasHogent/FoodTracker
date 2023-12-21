@@ -11,17 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.project.foodtracker.ui.product.ProductDetailState
+import com.project.foodtracker.ui.product.ProductDetailViewModel
 import com.project.foodtracker.ui.product_edit.ProductDetailEditViewModel
 
 @Composable
 fun EditProductContent(
-    paddingValues: PaddingValues,
+    modifier: Modifier,
     state: ProductDetailState,
-    viewModel: ProductDetailEditViewModel
+    viewModel: ProductDetailViewModel
 ) {
     Column(
-
-        modifier = Modifier.fillMaxSize().padding(paddingValues)
+        modifier = modifier.fillMaxSize()
     ) {
         Row(
             modifier = Modifier

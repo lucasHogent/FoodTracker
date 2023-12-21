@@ -120,7 +120,7 @@ class ProductListViewModel @Inject constructor(
                 }
                 _state.value = _state.value.copy(
                     products = (_state.value.products + (deletedProduct?.asProductModel() ?: return))
-                        .sortedByDescending { it.title }
+                        .sortedBy{ it.title }
                 )
 
             }

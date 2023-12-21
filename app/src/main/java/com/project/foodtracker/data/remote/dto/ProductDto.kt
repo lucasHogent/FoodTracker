@@ -48,8 +48,8 @@ fun ProductDto.asEntity(): ProductEntity {
         veryPopular = false,
         weightWatcherSmartPoints = 0,
         dishTypes = emptyList(),
-        summary = ""
-
+        summary = "",
+        deleted = false
     )
 }
 

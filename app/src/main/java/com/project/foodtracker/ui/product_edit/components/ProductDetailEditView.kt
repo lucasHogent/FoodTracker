@@ -1,7 +1,10 @@
 package com.project.foodtracker.ui.product_edit.components
 
 import android.annotation.SuppressLint
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -15,6 +18,7 @@ import com.project.foodtracker.ui.product_edit.ProductDetailEditEvent
 import com.project.foodtracker.ui.product_edit.ProductDetailEditViewModel
 import com.project.foodtracker.ui.util.UiEvent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun ProductDetailEditView(
@@ -52,12 +56,14 @@ fun ProductDetailEditView(
         }
     }
 
-    EditProductScaffold(
-        state = state,
-        snackbarHostState = snackbarHostState,
-        onNavigate = onNavigate,
-        viewModel = viewModel
-    )
+//    Scaffold(
+//        topBar = { EditProductTopAppBar(onNavigate = { viewModel.onEvent(ProductDetailEditEvent.OnClickGoBack()) }) },
+//        snackbarHost = { SnackbarHost(snackbarHostState) },
+//        floatingActionButton = { EditProductFab(onClick = {
+//
+//            viewModel.onEvent(ProductDetailEditEvent.OnClickSaveProductDetail()) }) },
+//        content = { EditProductContent(it, state, viewModel = viewModel) }
+//    )
 }
 
 
