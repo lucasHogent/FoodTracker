@@ -54,7 +54,8 @@ interface IProductDao {
      * @return A list of [ProductEntity] entities representing all products.
      */
     @Transaction
-    @Query("SELECT * FROM products ORDER BY title ASC")
+    @Query("SELECT * FROM products " +
+            "WHERE deleted = 0 ORDER BY title ASC")
     fun getAllProducts(): List<ProductEntity>
 
     /**
@@ -70,7 +71,9 @@ interface IProductDao {
      * @return A list of [ProductEntity] entities representing products with matching titles.
      */
     @Transaction
-    @Query("SELECT * FROM products WHERE title LIKE '%' || :title || '%' ORDER BY title ASC")
+    @Query("SELECT * FROM products " +
+            "WHERE deleted = 0 " +
+            "AND title LIKE '%' || :title || '%' ORDER BY title ASC")
     fun getAllProductsByTitle(title: String): List<ProductEntity>
 
     /**

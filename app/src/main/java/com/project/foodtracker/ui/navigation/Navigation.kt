@@ -10,9 +10,9 @@ import androidx.navigation.navArgument
 import com.project.foodtracker.ui.discover.DiscoverScreen
 import com.project.foodtracker.ui.favorites.FavoritesScreen
 import com.project.foodtracker.ui.home.HomeScreen
+import com.project.foodtracker.ui.product.components.ProductDetailView
 import com.project.foodtracker.ui.util.Screen
-import com.project.foodtracker.ui.product.ProductDetailScreen
-import com.project.foodtracker.ui.product_edit.ProductDetailEditScreen
+ import com.project.foodtracker.ui.product_edit.components.ProductDetailEditView
 
 @Composable
 fun NavComponent(navController: NavHostController,
@@ -26,7 +26,7 @@ fun NavComponent(navController: NavHostController,
 
         composable(Screen.Discover.route) { DiscoverScreen(navController) }
         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
-        composable(Screen.Home.route) { HomeScreen(navController) }
+        composable(Screen.Home.route) { HomeScreen() }
         composable(
             route = Screen.ProductDetail.route + "?productId={productId}",
             arguments = listOf(
@@ -36,7 +36,7 @@ fun NavComponent(navController: NavHostController,
                 }
             )
         ) {
-            ProductDetailScreen(navController = navController, onNavigate = {
+            ProductDetailView(navController = navController, onNavigate = {
                 navController.navigate(it.route)
             },)
         }
@@ -49,7 +49,7 @@ fun NavComponent(navController: NavHostController,
                 }
             )
         ) {
-            ProductDetailEditScreen(navController, onNavigate = {
+            ProductDetailEditView(navController, onNavigate = {
                 navController.navigate(it.route)})
         }
 

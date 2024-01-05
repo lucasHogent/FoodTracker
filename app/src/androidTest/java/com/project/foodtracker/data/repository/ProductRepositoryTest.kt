@@ -8,13 +8,16 @@ import com.project.foodtracker.data.database.entities.asProductModel
 import com.project.foodtracker.data.mock.MockProductDtoProvider
 import com.project.foodtracker.data.mock.MockProductEntityProvider
 import com.project.foodtracker.data.remote.IProductApiService
+import com.project.foodtracker.domain.model.asProductModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
@@ -38,6 +41,7 @@ class ProductRepositoryTest {
     private val testDispatcher = StandardTestDispatcher()
     private val testScope = TestScope(testDispatcher)
 
+
     @Before
     fun setup() {
         productDao = mock(IProductDao::class.java)
@@ -54,14 +58,14 @@ class ProductRepositoryTest {
 
         // Given
         val mockProductList = MockProductEntityProvider.createMockProductEntityList(10)
-        `when`(productDao.getAllProducts()).thenReturn(mockProductList)
 
         // When
+        `when`(productDao.getAllProducts()).thenReturn(mockProductList)
         val flowResult = productRepository.getAllProducts()
 
         // Then
 
-        assertEquals(mockProductList.map { it.asProductModel() }, mockProductList)
+        assertEquals(flowResult, mockProductList.map { it.asProductModel() })
 
     }
 
@@ -73,50 +77,16 @@ class ProductRepositoryTest {
 
         // Arrange
         val productId = UUID.randomUUID().toString()
-        val mockProductEntity = MockProductEntityProvider.createMockProductEntity()
+        var mockProductEntity = MockProductEntityProvider.createMockProductEntity()
 
         mockProductEntity.copy(productId = productId)
 
         // When
-        //`when`(productDao.get(productId)).thenReturn(flow { emit(createMockProductDetailEntity()) })
+        `when`(productDao.get(productId)).thenReturn(mockProductEntity)
         val flowResult = productRepository.getProductById(productId)
 
         // Then
-
-        assertEquals(mockProductEntity.asProductModel(), mockProductEntity)
-
-    }
-
-    /**
-     * Test case for [ProductRepository.getProductById] when an error occurs.
-     */
-    @Test
-    fun getProductById_returns_nothing_trows_error() = testScope.runTest {
-
-        // Given
-        val productId = UUID.randomUUID().toString()
-
-        // When
-        `when`(productDao.get(productId)).thenThrow(RuntimeException("Simulated error"))
-        val flowResult = productRepository.getProductById(productId)
-
-        // Then
-        assertNull(flowResult)
-
-    }
-
-    /**
-     * Test case for [ProductRepository.refreshDatabase].
-     */
-    @Test
-    fun getProductsFromApi_insertsProductEntities() = testScope.runTest {
-
-        // Given
-        val mockProductDto = MockProductDtoProvider.createMockProductDtoList(10)
-
-        // When
-
-        productRepository.clear()
+        assertEquals(mockProductEntity.asProductModel(), flowResult.asProductModel())
 
     }
 

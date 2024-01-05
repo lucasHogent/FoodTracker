@@ -68,7 +68,8 @@ fun ProductDetailModel.asEntity(): ProductEntity {
         veryPopular = this.veryPopular,
         weightWatcherSmartPoints = this.weightWatcherSmartPoints,
         dishTypes = this.dishTypes,
-        summary = this.summary
+        summary = this.summary,
+        deleted = false
     )
 }
 
