@@ -1,3 +1,4 @@
+import com.android.sdklib.AndroidVersion.VersionCodes
 
 plugins {
     id("com.android.application")
@@ -15,11 +16,12 @@ android {
     defaultConfig {
         applicationId = "com.project.foodtracker"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = VersionCodes.TIRAMISU
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.project.foodtracker.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -95,10 +97,10 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
     // Room Database dependencies
-    val room_version = "2.6.0"
+    val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-rxjava2:$room_version")
     implementation("androidx.room:room-rxjava3:$room_version")
