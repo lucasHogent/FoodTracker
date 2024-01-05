@@ -24,4 +24,5 @@ class UpsertProductUseCaseTest {
 
         verify(mockRepository).updateProduct(product)
     }
+
 }

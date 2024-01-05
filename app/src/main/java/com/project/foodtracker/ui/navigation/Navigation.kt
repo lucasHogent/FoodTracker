@@ -26,7 +26,7 @@ fun NavComponent(navController: NavHostController,
 
         composable(Screen.Discover.route) { DiscoverScreen(navController) }
         composable(Screen.Favorites.route) { FavoritesScreen(navController) }
-        composable(Screen.Home.route) { HomeScreen(navController) }
+        composable(Screen.Home.route) { HomeScreen() }
         composable(
             route = Screen.ProductDetail.route + "?productId={productId}",
             arguments = listOf(
